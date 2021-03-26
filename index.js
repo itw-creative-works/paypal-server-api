@@ -87,7 +87,6 @@ PayPal.prototype.execute = function (url, options) {
             return reject(e)
           })
         } else {
-          console.log('------4', res.statusText || 'Unknown error.');
           return reject(new Error(res.statusText || 'Unknown error.'))
         }
       })
