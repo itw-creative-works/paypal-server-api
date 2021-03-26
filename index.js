@@ -74,8 +74,13 @@ PayPal.prototype.execute = function (url, options) {
     fetch(url, payload)
       .then(async (res) => {
         if (res.status >= 200 && res.status < 300) {
-          let json = await res.json()
-          return resolve(json);
+          await res.json()
+          .then(json => resolve(json))
+          .catch(async json => {
+            await res.text()
+            .then(text => resolve(text))
+            .catch(e => new Error(e))
+          })
         } else {
           return reject(new Error(res.statusText || 'Unknown error.'))
         }
