@@ -1,4 +1,5 @@
 const fetch = require('node-fetch');
+const JSON5 = require('json5');
 
 function PayPal(options) {
   options = options || {};
@@ -74,14 +75,19 @@ PayPal.prototype.execute = function (url, options) {
     fetch(url, payload)
       .then(async (res) => {
         if (res.status >= 200 && res.status < 300) {
-          await res.json()
-          .then(json => resolve(json))
-          .catch(async json => {
-            await res.text()
-            .then(text => resolve(text))
-            .catch(e => new Error(e))
+          await res.text()
+          .then(text => {
+            try {
+              return resolve(JSON5.parse(text));
+            } catch (e) {
+              return resolve(text);
+            }
+          })
+          .catch(e => {
+            return reject(e)
           })
         } else {
+          console.log('------4', res.statusText || 'Unknown error.');
           return reject(new Error(res.statusText || 'Unknown error.'))
         }
       })
