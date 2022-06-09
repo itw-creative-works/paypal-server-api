@@ -1,11 +1,11 @@
 {
   "name": "paypal-server-api",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Powerful assistive library for interacting with the PayPal API.",
   "main": "dist/index.js",
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha test/ --recursive --timeout=10000",
-    "prepare": "node ./src/prepare.js"
+    "prepare": "node -e 'require(`prepare-package`)'"
   },
   "engines": {
     "node": ">=6.0.0"
@@ -32,6 +32,7 @@
   },
   "devDependencies": {
     "fs-jetpack": "^4.3.1",
-    "mocha": "^8.0.1"
+    "mocha": "^8.0.1",
+    "prepare-package": "^0.0.6"
   }
 }
