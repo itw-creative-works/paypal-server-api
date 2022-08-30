@@ -50,6 +50,17 @@ const billingData = await paypal.execute(`v1/billing/subscriptions/I-ABC123ABC12
 
 ```
 
+## Testing the library
+Add your PayPal client secret and client ID to environment variables and run the test command
+```shell
+export PAYPAL_CLIENT_ID="..."
+export PAYPAL_SECRET="..."
+export PAYPAL_SUBSCRIPTION_ID="..."
+
+npm run test
+```
+
+
 ## Final Words
 If you are still having difficulty, we would love for you to post a question to [the PayPal API issues page](https://github.com/itw-creative-works/paypal-server-api/issues). It is much easier to answer questions that include your code and relevant files! So if you can provide them, we'd be extremely grateful (and more likely to help you find the answer!)
 

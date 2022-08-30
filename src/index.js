@@ -1,14 +1,26 @@
-const fetch = require('node-fetch');
+const fetch = require('wonderful-fetch');
 const JSON5 = require('json5');
 
 function PayPal(options) {
+  const self = this;
+
   options = options || {};
-  this.client_id = options.client_id || options.clientId || options.username || '';
-  this.secret = options.secret || options.password || '';
-  this.environment = options.environment || 'sandbox';
-  this.access_token = '';
-  this.log = options.log;
-  return this;
+  
+  self.client_id = options.client_id || options.clientId || options.username || '';
+  self.secret = options.secret || options.password || '';
+  self.environment = options.environment || 'sandbox';
+  self.access_token = '';
+  self.log = options.log;
+
+  self.tries = typeof options.tries === 'undefined' 
+    ? 2
+    : options.tries
+
+  self.timeout = typeof options.timeout === 'undefined' 
+    ? 30000
+    : options.timeout    
+
+  return self;
 }
 
 PayPal.prototype.authenticate = function () {
@@ -21,25 +33,23 @@ PayPal.prototype.authenticate = function () {
   return new Promise(function(resolve, reject) {
     fetch(url, {
       method: 'post',
-      body: 'grant_type=client_credentials',
+      response: 'json',
+      tries: 2,
+      timeout: 30000,      
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': 'en_US',
         'Authorization': `Basic ${Buffer.from(self.client_id + ':' + self.secret).toString('base64')}`,
       },
+      body: 'grant_type=client_credentials',
     })
-    .then(async (res) => {
-      if (res.status >= 200 && res.status < 300) {
-        let json = await res.json();
-        if (!json || !json.access_token) {
-          return reject(new Error('No access token.'))
-        }
-        self.access_token = json.access_token;
-        return resolve(json);
-      } else {
-        return reject(new Error(res.statusText || 'Unknown error.'))
+    .then(async (json) => {
+      if (!json || !json.access_token) {
+        return reject(new Error('No access token.'))
       }
+      self.access_token = json.access_token;
+      return resolve(json);
     })
     .catch(e => {
       return reject(e);
@@ -58,6 +68,9 @@ PayPal.prototype.execute = function (url, options) {
 
   let payload =
     {
+      response: 'text',
+      tries: 2,
+      timeout: 30000,         
       method: options.method || 'get',
       headers: {
         'Accept': 'application/json',
@@ -73,21 +86,11 @@ PayPal.prototype.execute = function (url, options) {
 
   return new Promise(function(resolve, reject) {
     fetch(url, payload)
-      .then(async (res) => {
-        if (res.status >= 200 && res.status < 300) {
-          await res.text()
-          .then(text => {
-            try {
-              return resolve(JSON5.parse(text));
-            } catch (e) {
-              return resolve(text);
-            }
-          })
-          .catch(e => {
-            return reject(e)
-          })
-        } else {
-          return reject(new Error(res.statusText || 'Unknown error.'))
+      .then(async (text) => {
+        try {
+          return resolve(JSON5.parse(text));
+        } catch (e) {
+          return resolve(text);
         }
       })
       .catch(e => {

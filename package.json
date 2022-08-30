@@ -1,10 +1,10 @@
 {
   "name": "paypal-server-api",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Powerful assistive library for interacting with the PayPal API.",
   "main": "dist/index.js",
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha test/ --recursive --timeout=10000",
+    "test": "npm run prepare && ./node_modules/mocha/bin/mocha test/ --recursive --timeout=10000",
     "prepare": "node -e 'require(`prepare-package`)'"
   },
   "engines": {
@@ -28,11 +28,11 @@
   "homepage": "https://itwcreativeworks.com",
   "dependencies": {
     "json5": "^2.2.0",
-    "node-fetch": "^2.6.1"
+    "wonderful-fetch": "^0.0.14"
   },
   "devDependencies": {
     "fs-jetpack": "^4.3.1",
     "mocha": "^8.0.1",
-    "prepare-package": "^0.0.6"
+    "prepare-package": "^0.0.13"
   }
 }
