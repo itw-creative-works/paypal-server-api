@@ -102,7 +102,7 @@ PayPal.prototype.execute = function (url, options) {
 PayPal.prototype._getURL = function (url) {
   const self = this;
   return (self.environment === 'sandbox' || self.environment === 'development' || self.environment === 'dev'
-    ? `https://api-m.sandbox.paypal.com/${url}`
+    ? `https://api.sandbox.paypal.com/${url}`
     : `https://api.paypal.com/${url}`).replace(/v1\/\//g, '')
 };
 
