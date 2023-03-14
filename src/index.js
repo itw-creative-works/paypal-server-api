@@ -5,20 +5,20 @@ function PayPal(options) {
   const self = this;
 
   options = options || {};
-  
+
   self.client_id = options.client_id || options.clientId || options.username || '';
-  self.secret = options.secret || options.password || '';
+  self.secret = options.client_secret || options.secret || options.password || '';
   self.environment = options.environment || 'sandbox';
   self.access_token = '';
   self.log = options.log;
 
-  self.tries = typeof options.tries === 'undefined' 
+  self.tries = typeof options.tries === 'undefined'
     ? 2
     : options.tries
 
-  self.timeout = typeof options.timeout === 'undefined' 
+  self.timeout = typeof options.timeout === 'undefined'
     ? 30000
-    : options.timeout    
+    : options.timeout
 
   return self;
 }
@@ -35,7 +35,7 @@ PayPal.prototype.authenticate = function () {
       method: 'post',
       response: 'json',
       tries: 2,
-      timeout: 30000,      
+      timeout: 30000,
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -70,14 +70,14 @@ PayPal.prototype.execute = function (url, options) {
     {
       response: 'text',
       tries: 2,
-      timeout: 30000,         
+      timeout: 30000,
       method: options.method || 'get',
-      headers: {
+      headers: Object.assign({
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': 'en_US',
         'Authorization': `Bearer ${self.access_token}`,
-      },
+      }, options.headers || {}),
     }
 
   if (options.body) {
