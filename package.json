@@ -1,6 +1,6 @@
 {
   "name": "paypal-server-api",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Powerful assistive library for interacting with the PayPal API.",
   "main": "dist/index.js",
   "scripts": {
@@ -27,8 +27,8 @@
   },
   "homepage": "https://itwcreativeworks.com",
   "dependencies": {
-    "json5": "^2.2.0",
-    "wonderful-fetch": "^0.0.14"
+    "json5": "^2.2.3",
+    "wonderful-fetch": "^0.0.17"
   },
   "devDependencies": {
     "fs-jetpack": "^4.3.1",
