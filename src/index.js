@@ -25,12 +25,16 @@ function PayPal(options) {
 
 PayPal.prototype.authenticate = function () {
   const self = this;
-  const url = `${self._getURL('v1/oauth2/token')}`;
-  if (self.log) {
-    console.log('Authenticate', url);
-  }
 
   return new Promise(function(resolve, reject) {
+    const url = `${self._getURL('v1/oauth2/token')}`;
+    
+    // Log
+    if (self.log) {
+      console.log('Authenticate', url);
+    }
+
+    // Authenticate with server
     fetch(url, {
       method: 'post',
       response: 'json',
@@ -48,7 +52,9 @@ PayPal.prototype.authenticate = function () {
       if (!json || !json.access_token) {
         return reject(new Error('No access token.'))
       }
+
       self.access_token = json.access_token;
+
       return resolve(json);
     })
     .catch(e => {
@@ -60,14 +66,12 @@ PayPal.prototype.authenticate = function () {
 PayPal.prototype.execute = function (url, options) {
   const self = this;
 
-  options = options || {};
-  url = self._getURL(url);
-  if (self.log) {
-    console.log('Execute', url);
-  }
+  return new Promise(function(resolve, reject) {
+    options = options || {};
+    url = self._getURL(url);
 
-  let payload =
-    {
+    // Build payload
+    const payload = {
       response: 'text',
       tries: 2,
       timeout: 30000,         
@@ -80,11 +84,17 @@ PayPal.prototype.execute = function (url, options) {
       },
     }
 
-  if (options.body) {
-    payload.body = JSON.stringify(options.body);
-  }
+    // Add body
+    if (options.body) {
+      payload.body = options.body;
+    }
 
-  return new Promise(function(resolve, reject) {
+    // Log
+    if (self.log) {
+      console.log('Execute', url, payload.headers, payload.body || {});
+    }    
+
+    // Execute
     fetch(url, payload)
       .then(async (text) => {
         try {
@@ -101,10 +111,14 @@ PayPal.prototype.execute = function (url, options) {
 
 PayPal.prototype._getURL = function (url) {
   const self = this;
+
+  url = (url || '')
+    // Remove leading slashes
+    .replace(/^\/+/, '')
+
   return (self.environment === 'sandbox' || self.environment === 'development' || self.environment === 'dev'
     ? `https://api-m.sandbox.paypal.com/${url}`
-    : `https://api.paypal.com/${url}`).replace(/v1\/\//g, '')
+    : `https://api.paypal.com/${url}`)
 };
-
 
 module.exports = PayPal;

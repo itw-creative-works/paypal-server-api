@@ -22,7 +22,7 @@
   <a href="https://itwcreativeworks.com">Site</a> | <a href="https://www.npmjs.com/package/paypal-server-api">NPM Module</a> | <a href="https://github.com/itw-creative-works/paypal-server-api">GitHub Repo</a>
   <br>
   <br>
-  <strong>PayPal API</strong> is an NPM module for backend and frontend developers that exposes powerful utilities and tools.
+  <strong>PayPal API</strong> makes it easy to work with the PayPal API.
 </p>
 
 ## Install
@@ -35,19 +35,51 @@ npm install paypal-server-api
 * Work with the PayPal API
 
 ## Example Setup
-After installing via npm, simply `require` the library and begin enjoying the library 🧰.
+After installing via npm, simply `require` the library and authenticate it.
 ```js
 // In your functions/index.js file
 const Payapl = require('paypal-server-api');
 const paypal = new Payapl({
-  clientId: 'client_id',
-  secret: 'secret',
-  environment: 'production', // production | sandbox
-  log: true,
+  clientId: 'client_id', // Your PayPal client ID
+  secret: 'secret', // Your PayPal secret
+  environment: 'production', // Determine which API URL to use (sandbox OR production)
+  log: true, // Log some information to the console
 });
-await paypal.authenticate();
-const billingData = await paypal.execute(`v1/billing/subscriptions/I-ABC123ABC123`);
 
+// Authenticate with PayPal
+await paypal.authenticate();
+```
+
+## Making calls
+After installing and authenticating, begin enjoying the library 🧰.
+```js
+// Get subscription details
+const subscription = await paypal.execute(`v1/billing/subscriptions/I-ABC123ABC123`);
+
+// Update subscription pricing
+const update = await paypal.execute(`v1/billing/subscriptions/I-ABC123ABC123`, {
+  method: 'PATCH',
+  body: [
+    {
+      op: 'replace',
+      path: '/plan/billing_cycles/@sequence==1/pricing_scheme/fixed_price',
+      value: {
+        currency_code: 'USD',
+        value: '19.95',
+      },
+    },
+    {
+      op: 'replace',
+      path: '/plan/payment_preferences/payment_failure_threshold',
+      value: 0,
+    },            
+    {
+      op: 'replace',
+      path: '/plan/payment_preferences/auto_bill_outstanding',
+      value: true,
+    },
+  ]
+});
 ```
 
 ## Testing the library
