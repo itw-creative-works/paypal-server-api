@@ -39,7 +39,8 @@ PayPal.prototype.authenticate = function () {
       method: 'post',
       response: 'json',
       tries: 2,
-      timeout: 30000,      
+      timeout: 30000,     
+      cacheBreaker: false, 
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -72,10 +73,11 @@ PayPal.prototype.execute = function (url, options) {
 
     // Build payload
     const payload = {
+      method: options.method || 'get',
       response: 'text',
       tries: 2,
       timeout: 30000,         
-      method: options.method || 'get',
+      cacheBreaker: false, 
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
