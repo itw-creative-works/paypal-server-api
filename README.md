@@ -7,8 +7,7 @@
 <p align="center">
   <img src="https://img.shields.io/github/package-json/v/itw-creative-works/paypal-server-api.svg">
   <br>
-  <img src="https://img.shields.io/david/itw-creative-works/paypal-server-api.svg">
-  <img src="https://img.shields.io/david/dev/itw-creative-works/paypal-server-api.svg">
+  <img src="https://img.shields.io/librariesio/release/npm/paypal-server-api.svg">
   <img src="https://img.shields.io/bundlephobia/min/paypal-server-api.svg">
   <img src="https://img.shields.io/codeclimate/maintainability-percentage/itw-creative-works/paypal-server-api.svg">
   <img src="https://img.shields.io/npm/dm/paypal-server-api.svg">
@@ -72,7 +71,7 @@ const update = await paypal.execute(`v1/billing/subscriptions/I-ABC123ABC123`, {
       op: 'replace',
       path: '/plan/payment_preferences/payment_failure_threshold',
       value: 0,
-    },            
+    },
     {
       op: 'replace',
       path: '/plan/payment_preferences/auto_bill_outstanding',
