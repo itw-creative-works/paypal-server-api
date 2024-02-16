@@ -5,20 +5,20 @@ function PayPal(options) {
   const self = this;
 
   options = options || {};
-  
+
   self.client_id = options.client_id || options.clientId || options.username || '';
   self.secret = options.secret || options.password || '';
   self.environment = options.environment || 'sandbox';
   self.access_token = '';
   self.log = options.log;
 
-  self.tries = typeof options.tries === 'undefined' 
+  self.tries = typeof options.tries === 'undefined'
     ? 2
     : options.tries
 
-  self.timeout = typeof options.timeout === 'undefined' 
+  self.timeout = typeof options.timeout === 'undefined'
     ? 30000
-    : options.timeout    
+    : options.timeout
 
   return self;
 }
@@ -28,19 +28,17 @@ PayPal.prototype.authenticate = function () {
 
   return new Promise(function(resolve, reject) {
     const url = `${self._getURL('v1/oauth2/token')}`;
-    
+
     // Log
-    if (self.log) {
-      console.log('Authenticate', url);
-    }
+    self._log('Authenticate', url);
 
     // Authenticate with server
     fetch(url, {
       method: 'post',
       response: 'json',
       tries: 2,
-      timeout: 30000,     
-      cacheBreaker: false, 
+      timeout: 30000,
+      cacheBreaker: false,
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -76,8 +74,8 @@ PayPal.prototype.execute = function (url, options) {
       method: options.method || 'get',
       response: 'text',
       tries: 2,
-      timeout: 30000,         
-      cacheBreaker: false, 
+      timeout: 30000,
+      cacheBreaker: false,
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -92,13 +90,15 @@ PayPal.prototype.execute = function (url, options) {
     }
 
     // Log
-    if (self.log) {
-      console.log('Execute', url, payload.headers, payload.body || {});
-    }    
+    self._log('Execute', url, payload.headers, payload.body || {});
 
     // Execute
     fetch(url, payload)
       .then(async (text) => {
+        // Log
+        self._log('Response (raw)', text);
+
+        // Parse JSON
         try {
           return resolve(JSON5.parse(text));
         } catch (e) {
@@ -110,6 +110,14 @@ PayPal.prototype.execute = function (url, options) {
       });
   });
 }
+
+PayPal.prototype._log = function () {
+  const self = this;
+
+  if (self.log) {
+    console.log('[PayPal]', ...arguments);
+  }
+};
 
 PayPal.prototype._getURL = function (url) {
   const self = this;
