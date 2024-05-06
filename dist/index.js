@@ -89,6 +89,11 @@ PayPal.prototype.execute = function (url, options) {
       payload.body = options.body;
     }
 
+    // Add headers
+    if (options.headers) {
+      payload.headers = Object.assign(payload.headers, options.headers);
+    }
+
     // Log
     self._log('Execute', url, payload.headers, payload.body || {});
 
