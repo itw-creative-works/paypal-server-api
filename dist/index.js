@@ -78,7 +78,7 @@ PayPal.prototype.execute = function (url, options) {
       cacheBreaker: false,
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json',
+        // 'Content-Type': 'application/json',
         'Accept-Language': 'en_US',
         'Authorization': `Bearer ${self.access_token}`,
       },
