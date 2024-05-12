@@ -10,7 +10,9 @@ function PayPal(options) {
   self.secret = options.secret || options.password || '';
   self.environment = options.environment || 'sandbox';
   self.access_token = '';
-  self.log = options.log;
+  self.log = typeof options.log === 'undefined'
+    ? false
+    : options.log
 
   self.tries = typeof options.tries === 'undefined'
     ? 2
@@ -39,6 +41,7 @@ PayPal.prototype.authenticate = function () {
       tries: 2,
       timeout: 30000,
       cacheBreaker: false,
+      log: self.log,
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -66,22 +69,36 @@ PayPal.prototype.execute = function (url, options) {
   const self = this;
 
   return new Promise(function(resolve, reject) {
-    options = options || {};
+    // Set URL
     url = self._getURL(url);
+
+    // Set options
+    options = options || {};
+    options.request = typeof options.request === 'undefined'
+      ? 'json'
+      : options.request
 
     // Build payload
     const payload = {
-      method: options.method || 'get',
+      method: (options.method || 'get').toLowerCase(),
       response: 'text',
       tries: 2,
       timeout: 30000,
       cacheBreaker: false,
+      log: self.log,
       headers: {
         'Accept': 'application/json',
         // 'Content-Type': 'application/json',
         'Accept-Language': 'en_US',
         'Authorization': `Bearer ${self.access_token}`,
       },
+    }
+
+    // Add request type
+    if (options.request === 'json') {
+      payload.headers['Content-Type'] = 'application/json';
+    } else if (options.request === 'form') {
+      delete payload.headers['Content-Type']; // This will be set by wonderful-fetch automatically
     }
 
     // Add body
