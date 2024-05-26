@@ -25,11 +25,15 @@ function PayPal(options) {
   return self;
 }
 
-PayPal.prototype.authenticate = function () {
+PayPal.prototype.authenticate = function (options) {
   const self = this;
 
   return new Promise(function(resolve, reject) {
     const url = `${self._getURL('v1/oauth2/token')}`;
+
+    // Set options
+    options = options || {};
+    options.timeout = typeof options.timeout === 'undefined' ? undefined : options.timeout;
 
     // Log
     self._log('Authenticate', url);
@@ -39,7 +43,7 @@ PayPal.prototype.authenticate = function () {
       method: 'post',
       response: 'json',
       tries: 2,
-      timeout: 30000,
+      timeout: options.timeout || self.timeout,
       cacheBreaker: false,
       log: self.log,
       headers: {
@@ -77,13 +81,14 @@ PayPal.prototype.execute = function (url, options) {
     options.request = typeof options.request === 'undefined'
       ? 'json'
       : options.request
+    options.timeout = typeof options.timeout === 'undefined' ? undefined : options.timeout;
 
     // Build payload
     const payload = {
       method: (options.method || 'get').toLowerCase(),
       response: 'text',
       tries: 2,
-      timeout: 30000,
+      timeout: options.timeout || self.timeout,
       cacheBreaker: false,
       log: self.log,
       headers: {
