@@ -1,6 +1,6 @@
 {
   "name": "paypal-server-api",
-  "version": "2.0.9",
+  "version": "2.0.12",
   "description": "Powerful assistive library for interacting with the PayPal API.",
   "main": "dist/index.js",
   "scripts": {

@@ -22,6 +22,10 @@ function PayPal(options) {
     ? 30000
     : options.timeout
 
+  self.fetch = typeof options.fetch === 'undefined'
+    ? fetch
+    : options.fetch
+
   return self;
 }
 
@@ -41,7 +45,7 @@ PayPal.prototype.authenticate = function (options) {
     self._log('Authenticate', url);
 
     // Authenticate with server
-    fetch(url, {
+    self.fetch(url, {
       method: 'post',
       response: 'json',
       tries: options.tries,
@@ -97,7 +101,6 @@ PayPal.prototype.execute = function (url, options) {
       cacheBreaker: false,
       headers: {
         'Accept': 'application/json',
-        // 'Content-Type': 'application/json',
         'Accept-Language': 'en_US',
         'Authorization': `Bearer ${self.access_token}`,
       },
@@ -124,7 +127,7 @@ PayPal.prototype.execute = function (url, options) {
     self._log('Execute', url, payload.headers, payload.body || {});
 
     // Execute
-    fetch(url, payload)
+    self.fetch(url, payload)
       .then(async (text) => {
         // Log
         self._log('Response (raw)', text);
