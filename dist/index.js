@@ -34,6 +34,7 @@ PayPal.prototype.authenticate = function (options) {
     // Set options
     options = options || {};
     options.timeout = typeof options.timeout === 'undefined' ? undefined : options.timeout;
+    options.log = typeof options.log === 'undefined' ? self.log : options.log;
 
     // Log
     self._log('Authenticate', url);
@@ -45,7 +46,7 @@ PayPal.prototype.authenticate = function (options) {
       tries: 2,
       timeout: options.timeout || self.timeout,
       cacheBreaker: false,
-      log: self.log,
+      log: options.log,
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -82,6 +83,7 @@ PayPal.prototype.execute = function (url, options) {
       ? 'json'
       : options.request
     options.timeout = typeof options.timeout === 'undefined' ? undefined : options.timeout;
+    options.log = typeof options.log === 'undefined' ? self.log : options.log;
 
     // Build payload
     const payload = {
@@ -90,7 +92,7 @@ PayPal.prototype.execute = function (url, options) {
       tries: 2,
       timeout: options.timeout || self.timeout,
       cacheBreaker: false,
-      log: self.log,
+      log: options.log,
       headers: {
         'Accept': 'application/json',
         // 'Content-Type': 'application/json',
