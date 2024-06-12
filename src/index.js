@@ -33,7 +33,8 @@ PayPal.prototype.authenticate = function (options) {
 
     // Set options
     options = options || {};
-    options.timeout = typeof options.timeout === 'undefined' ? undefined : options.timeout;
+    options.tries = typeof options.tries === 'undefined' ? self.tries : options.tries;
+    options.timeout = typeof options.timeout === 'undefined' ? self.timeout : options.timeout;
     options.log = typeof options.log === 'undefined' ? self.log : options.log;
 
     // Log
@@ -43,10 +44,10 @@ PayPal.prototype.authenticate = function (options) {
     fetch(url, {
       method: 'post',
       response: 'json',
-      tries: 2,
-      timeout: options.timeout || self.timeout,
-      cacheBreaker: false,
+      tries: options.tries,
+      timeout: options.timeout,
       log: options.log,
+      cacheBreaker: false,
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -82,17 +83,18 @@ PayPal.prototype.execute = function (url, options) {
     options.request = typeof options.request === 'undefined'
       ? 'json'
       : options.request
-    options.timeout = typeof options.timeout === 'undefined' ? undefined : options.timeout;
+    options.tries = typeof options.tries === 'undefined' ? self.tries : options.tries;
+    options.timeout = typeof options.timeout === 'undefined' ? self.timeout : options.timeout;
     options.log = typeof options.log === 'undefined' ? self.log : options.log;
 
     // Build payload
     const payload = {
       method: (options.method || 'get').toLowerCase(),
       response: 'text',
-      tries: 2,
-      timeout: options.timeout || self.timeout,
-      cacheBreaker: false,
+      tries: options.tries,
+      timeout: options.timeout,
       log: options.log,
+      cacheBreaker: false,
       headers: {
         'Accept': 'application/json',
         // 'Content-Type': 'application/json',
