@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://cdn.itwcreativeworks.com/assets/itw-creative-works/images/logo/itw-creative-works-brandmark-black-x.svg">
+  <a href="https://itwcreativeworks.com">
     <img src="https://cdn.itwcreativeworks.com/assets/itw-creative-works/images/logo/itw-creative-works-brandmark-black-x.svg" width="100px">
   </a>
 </p>
@@ -24,16 +24,16 @@
   <strong>PayPal API</strong> makes it easy to work with the PayPal API.
 </p>
 
-## Install
+## 📦 Install PayPal API
 Install with npm:
 ```shell
 npm install paypal-server-api
 ```
 
-## Features
+## 🦄 Features
 * Work with the PayPal API
 
-## Example Setup
+## 📘 Example Setup
 After installing via npm, simply `require` the library and authenticate it.
 ```js
 // In your functions/index.js file
@@ -49,7 +49,7 @@ const paypal = new Payapl({
 await paypal.authenticate();
 ```
 
-## Making calls
+## 🚀 Making calls
 After installing and authenticating, begin enjoying the library 🧰.
 ```js
 // Get subscription details
@@ -81,7 +81,7 @@ const update = await paypal.execute(`v1/billing/subscriptions/I-ABC123ABC123`, {
 });
 ```
 
-## Testing the library
+## 🧪 Testing the library
 Add your PayPal client secret and client ID to environment variables and run the test command
 ```shell
 export PAYPAL_CLIENT_ID="..."
@@ -92,10 +92,10 @@ npm run test
 ```
 
 
-## Final Words
+## 🗨️ Final Words
 If you are still having difficulty, we would love for you to post a question to [the PayPal API issues page](https://github.com/itw-creative-works/paypal-server-api/issues). It is much easier to answer questions that include your code and relevant files! So if you can provide them, we'd be extremely grateful (and more likely to help you find the answer!)
 
-## Projects Using this Library
+## 📚 Projects Using this Library
 [Somiibo](https://somiibo.com/): A Social Media Bot with an open-source module library. <br>
 [JekyllUp](https://jekyllup.com/): A website devoted to sharing the best Jekyll themes. <br>
 [Slapform](https://slapform.com/): A backend processor for your HTML forms on static sites. <br>
